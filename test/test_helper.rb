@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-require "aws/app/settings"
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'aws/app/settings'
 
-require "test-unit"
+require 'test-unit'
+require 'mocha/test_unit'
+require 'timecop'
 
 require 'vcr'
 require 'pry'

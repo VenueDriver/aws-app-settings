@@ -45,6 +45,8 @@ application and environment names, for enabling the separation of environments.
   spec.add_dependency 'vcr', '~> 6.1'
   spec.add_dependency 'byebug', '~> 11.1', '>= 11.1.3'
   spec.add_dependency 'awesome_print', '~> 2.0.0.pre2'
+  spec.add_dependency 'mocha', '~> 1.15'
+  spec.add_dependency 'timecop', '~> 0.9.5'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
