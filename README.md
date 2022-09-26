@@ -29,7 +29,9 @@ To get a setting from the cloud, explicitly specifying the name:
 Returns:
 
     {
-      'testapp-testenvironment-testsetting' => 'test value'
+      name: 'testapp-testenvironment-testsetting',
+      physical_name: 'testapp-testenvironment-testsetting',
+      value: 'TEST VALUE!'
     }
 
 To get a setting from the cloud using a naming convention that includes the application name and the environment name, enabling separation of environments:
@@ -42,7 +44,17 @@ To get a setting from the cloud using a naming convention that includes the appl
       }
     ])
 
-This gets the same secret as the first example, but it encapsulates the logic for computing the name of the setting.
+Returns:
+
+    {
+      application: 'testapp',
+      environment: 'testenvironment',
+      name: 'testsetting'
+      physical_name: 'testapp-testenvironment-testsetting',
+      value: 'TEST VALUE!'
+    }
+
+This gets the same secret as the first example, but it encapsulates the logic for computing the physical name of the setting.
 
 ## Development
 

@@ -19,17 +19,24 @@ module Aws
           settings.class.eql?(Array)
         raise Error.new 'Each setting in the list must be a hash with a name.' unless
           settings.all?{|setting| setting.class.eql?(Hash) and
-            setting[:name] }
+            (setting[:name] or setting[:physical_name]) }
 
         settings = settings.map do |setting|
-          { name: get_setting_name(setting) }
+          setting.tap do |setting|
+            setting[:physical_name] = get_setting_physical_name(setting)
+          end
         end
 
         Aws::SSM::Client.new.get_parameters(
-          names: settings.map{|setting| setting[:name] },
+          names: settings.map{|setting| setting[:physical_name] },
             with_decryption: true,
-          )['parameters'].to_h {
-            |parameter| [parameter.name, parameter.value] }.tap do |secrets|
+          )['parameters'].map do |parameter|
+              settings.find{ |setting|
+                setting[:physical_name].eql? parameter.name }.merge(
+                  physical_name: parameter.name,
+                  value: parameter.value
+                )
+            end.tap do |secrets|
               if secrets.empty?
                 raise Error.new 'Could not get settings from AWS SSM.  ' +
                   'Are you authenticated to the correct account?'
@@ -37,7 +44,7 @@ module Aws
           end
       end
 
-      def self.get_setting_name(setting)
+      def self.get_setting_physical_name(setting)
         if setting[:application] and setting[:environment]
           [
             setting[:application],
@@ -47,8 +54,12 @@ module Aws
         elsif setting[:application] or setting[:environment]
           raise Error.new 'The application and the environment for ' +
             'an application setting must both be specified together.'
-        else
+        elsif setting[:physical_name]
+          setting[:physical_name]
+        elsif setting[:name]
           setting[:name]
+        else
+          raise Error.new 'Please specify a name for the setting.'
         end
       end
 

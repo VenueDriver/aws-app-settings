@@ -11,14 +11,14 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
 
   def test_get_setting_name
     assert_equal 'testapp-testenvironment-testsetting',
-      Aws::App::Settings.get_setting_name({
+      Aws::App::Settings.get_setting_physical_name({
         name: 'testapp-testenvironment-testsetting'
       })
   end
 
   def test_get_setting_name_with_application_and_environment
     assert_equal 'testapp-testenvironment-testsetting',
-      Aws::App::Settings.get_setting_name({
+      Aws::App::Settings.get_setting_physical_name({
         application: 'testapp',
         environment: 'testenvironment',
         name: 'testsetting'
@@ -27,7 +27,7 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
 
   def test_get_setting_name_with_only_application
     assert_raise Aws::App::Settings::Error do
-      Aws::App::Settings.get_setting_name({
+      Aws::App::Settings.get_setting_physical_name({
         application: 'testapp',
         name: 'testsetting'
       })
@@ -36,7 +36,7 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
 
   def test_get_setting_name_with_only_environment
     assert_raise Aws::App::Settings::Error do
-      Aws::App::Settings.get_setting_name({
+      Aws::App::Settings.get_setting_physical_name({
         environment: 'testenvironment',
         name: 'testsetting'
       })
@@ -46,9 +46,11 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
   def test_get_list
     VCR.use_cassette(__method__, :match_requests_on => [:method]) do
       assert_equal(
-        {
-        'testapp-testenvironment-testsetting' => 'Sierra is an artist.'
-        },
+        [{
+          name: 'testapp-testenvironment-testsetting',
+          physical_name: 'testapp-testenvironment-testsetting',
+          value: 'Sierra is an artist.'
+        }],
         Aws::App::Settings.get_list([
           {
             name: 'testapp-testenvironment-testsetting'
@@ -58,12 +60,44 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
     end
   end
 
+  def test_get_list_by_physical_name
+    VCR.use_cassette(__method__, :match_requests_on => [:method]) do
+      assert_equal(
+        [{
+          physical_name: 'testapp-testenvironment-testsetting',
+          value: 'Sierra is an artist.'
+        }],
+        Aws::App::Settings.get_list([
+          {
+            physical_name: 'testapp-testenvironment-testsetting'
+          }
+        ])
+      )
+    end
+  end
+
+  def test_get_list_with_no_name
+    VCR.use_cassette(__method__, :match_requests_on => [:method]) do
+      assert_raise Aws::App::Settings::Error do
+        Aws::App::Settings.get_list([
+          {
+            useless: 'testapp-testenvironment-testsetting'
+          }
+        ])
+      end
+    end
+  end
+
   def test_get_list_by_application_and_environment
     VCR.use_cassette(__method__, :match_requests_on => [:method]) do
       assert_equal(
-        {
-        'testapp-testenvironment-testsetting' => 'Sierra is an artist.'
-        },
+        [{
+          physical_name: 'testapp-testenvironment-testsetting',
+          value: 'Sierra is an artist.',
+          application: 'testapp',
+          environment: 'testenvironment',
+          name: 'testsetting'
+        }],
         Aws::App::Settings.get_list([
           {
             application: 'testapp',
