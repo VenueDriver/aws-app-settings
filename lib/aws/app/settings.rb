@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'aws-sdk-ssm'
 
-require_relative "settings/version"
+require_relative 'settings/version'
+require_relative 'settings/systems-manager-store'
 
 module Aws
   module App
@@ -27,7 +27,7 @@ module Aws
           end
         end
 
-        Aws::SSM::Client.new.get_parameters(
+        SystemsManagerStore.new.get_settings(
           names: settings.map{|setting| setting[:physical_name] },
             with_decryption: true,
           )['parameters'].map do |parameter|
