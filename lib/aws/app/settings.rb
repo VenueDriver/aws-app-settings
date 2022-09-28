@@ -74,7 +74,14 @@ module Aws
       end
 
       def self.get_setting_physical_name(setting)
-        if setting[:application] and setting[:environment]
+        if setting[:name] and environment_variable_value = ENV[setting[:name]] and
+          # If there's an environment variable matching the name with
+          # a value that matches the pattern that Amplify uses for storing
+          # secrets in AWS Systems Manager parameters, then return
+          # that value as the physical name for this setting.
+          match = environment_variable_value.match(/\/amplify\/.*AMPLIFY/)
+          environment_variable_value
+        elsif setting[:application] and setting[:environment]
           [
             setting[:application],
             setting[:environment],

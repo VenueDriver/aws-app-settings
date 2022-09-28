@@ -2,8 +2,9 @@ PATH
   remote: .
   specs:
     aws-app-settings (0.1.0)
-      awesome_print (~> 2.0.0.pre2)
+      awesome_print (= 1.9.2)
       byebug (~> 11.1, >= 11.1.3)
+      climate_control
       mocha (~> 1.15)
       pry (~> 0.14.1)
       timecop (~> 0.9.5)
@@ -12,8 +13,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    awesome_print (2.0.0.pre2)
+    awesome_print (1.9.2)
     byebug (11.1.3)
+    climate_control (1.2.0)
     coderay (1.1.3)
     method_source (1.0.0)
     mocha (1.15.0)

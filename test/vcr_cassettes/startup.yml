@@ -5,7 +5,8 @@ http_interactions:
     uri: https://ssm.us-east-1.amazonaws.com/
     body:
       encoding: UTF-8
-      string: '{"Names":["testapp-testenvironment-testsetting"],"WithDecryption":true}'
+      string: '{"Name":"/amplify/testappid/testenvironment/AMPLIFY_testfunction_TESTSETTING","Value":"Sierra
+        is an artist.","Type":"SecureString"}'
     headers:
       Accept-Encoding:
       - ''
@@ -14,19 +15,19 @@ http_interactions:
       Content-Type:
       - application/x-amz-json-1.1
       X-Amz-Target:
-      - AmazonSSM.GetParameters
+      - AmazonSSM.PutParameter
       X-Amz-Date:
       - 20220928T221347Z
       X-Amz-Security-Token:
       - IQoJb3JpZ2luX2VjEH4aCXVzLWVhc3QtMSJGMEQCIGe+DktSHpi8NgErBHvWpBJXgol7uWMvqQNiKSNkEMAmAiAe6ssPo+NbJCJsF0ZH9/zZTjwADNDnjHjTLH1WMX71jSqaAwg3EAAaDDMzMDczMTI0MzMwMCIM2vCW9CBANz+S0VgEKvcCwxbtUK2VGmS4Y0br/RJjKDKU+WB3emKIpi+DONaJ36+Ta8gWZYfGMdtp2UQZW35YnJ1VdWitlWEhcDsmksqPCBHEr4oekPSdt6K8F/+YtZXY+NuruW6ofW9tpiN/lwFSlyEWs0PfvRESvOQIuSUIQIacGTttC1yBQqKrdNr9BdDlteK1rngbb0R4l/DMqN+T+iuX689R2ihl/o/72kVuOYQtYJn0A+p2UHc6/+VQ2A/8MUnA1q/6eWMnTm6uDkk6Nomw1eZWdJlc1hYirDXtikV9zu2ASusaBm3wzxRciBE/bxmkGG7yUMNB+uzgRlaPfbgnXMMZlQOC7Pfxy050TyMiNZw9qEXKC0SxJ7NvG4Rni0Iw1nHNfbWA+bFoMeZZDvX8SRAXk6APxHRdmktQJpLQF8FQDNfexX8U362nBWiGQ6dOoVq5nmO6+a9SPstwKYX/fmcnP/NuYOQ/7rb4BLZv5wTv+SagCOpbdC7AEMXsaLr9THb/MP720pkGOqcB6W8gcgXj+V9ZHhRHTBh90r+rEkPMC9TgwmwUW39iItVKNVKGx3F/3SdgrhxuO/3uUq0EUHNGCfmXDW7ClrBQfAB40cP9S6IhSYU52IB08ZRCTUEZjSCLt1yxDtSK+Y15NZ/SfIdpybjb65mKio7i70t0WqrLMM+MngZDwpQDl98dv1aLAlfaTUJDJjQ/bLYLAaitokNjT+34mOjPo3CHE8avT/WMONM=
       X-Amz-Content-Sha256:
-      - 343ac18ca2adfcdc154b4fc03586c0f1e1a2a7c1fb5a67d82780da2cd128d463
+      - c51ce5b21f315dbf57e89b1f1cf0dcae9085de5fe3b959c2cdd3844365393890
       Authorization:
       - AWS4-HMAC-SHA256 Credential=ASIAU2AI6I4SBESBTCN3/20220928/us-east-1/ssm/aws4_request,
         SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date;x-amz-security-token;x-amz-target,
-        Signature=cb20223a90fdd3ad5ac82968c9a6690c329897ded7977e7bf778832f94a9af95
+        Signature=520976ca1824e2a7f3f2efb59167d7001b8ae88359a14b815e8d72c6b04d8733
       Content-Length:
-      - '71'
+      - '131'
       Accept:
       - "*/*"
   response:
@@ -41,14 +42,13 @@ http_interactions:
       Content-Type:
       - application/x-amz-json-1.1
       Content-Length:
-      - '288'
+      - '31'
       Connection:
       - keep-alive
       X-Amzn-Requestid:
-      - 3bf08f0a-781c-41aa-ad72-fc81c8ae6318
+      - 1390ee33-71b6-42d4-9323-bb28c3ce143f
     body:
       encoding: UTF-8
-      string: '{"InvalidParameters":[],"Parameters":[{"ARN":"arn:aws:ssm:us-east-1:330731243300:parameter/testapp-testenvironment-testsetting","DataType":"text","LastModifiedDate":1.664208586035E9,"Name":"testapp-testenvironment-testsetting","Type":"String","Value":"Sierra
-        is an artist.","Version":1}]}'
+      string: '{"Tier":"Standard","Version":1}'
   recorded_at: Wed, 28 Sep 2022 22:13:47 GMT
 recorded_with: VCR 6.1.0

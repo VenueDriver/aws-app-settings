@@ -6,6 +6,7 @@ require 'aws/app/settings'
 require 'test-unit'
 require 'mocha/test_unit'
 require 'timecop'
+require 'climate_control'
 
 require 'vcr'
 require 'pry'

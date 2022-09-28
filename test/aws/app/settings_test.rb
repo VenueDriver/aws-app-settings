@@ -176,6 +176,63 @@ class Aws::App::SettingsTest < Test::Unit::TestCase
     Timecop.return
   end
 
+  # https://docs.amplify.aws/cli/function/secrets/#configuring-secret-values
+  def test_dereference_amplify_secret
+    VCR.use_cassette(__method__, :match_requests_on => [:method]) do
+      Aws::App::Settings.purge_cache
+      ClimateControl.modify(
+        # This is a current environment variable, containing the physical name.
+        TESTSETTING:'/amplify/testappid/testenvironment/AMPLIFY_testfunction_TESTSETTING') do
+
+        # If I ask for this setting...
+        requested_settings = [{
+          name: 'TESTSETTING'
+        }]
+        # ...then it should find the physical name in an environment variable
+        # and then dereference that using AWS SSM to find the value for this setting.
+        expected_response = [{
+          name: 'TESTSETTING',
+          physical_name: '/amplify/testappid/testenvironment/AMPLIFY_testfunction_TESTSETTING',
+          value: 'Sierra is an artist.'
+        }]
+        assert_equal(expected_response,
+          without_expires_at(Aws::App::Settings.get_list(requested_settings)))
+      end
+    end
+  end
+
+  class << self
+    def tmp_setting_name
+      "/amplify/testappid/testenvironment/AMPLIFY_testfunction_TESTSETTING"
+    end
+    def startup
+      VCR.use_cassette(__method__, :match_requests_on => [:method]) do
+        Aws::App::Settings::SystemsManagerStore.new.create_setting(
+          name:  (@@tmp_setting_name ||= tmp_setting_name),
+          value: 'Sierra is an artist.'
+        )
+      rescue Aws::SSM::Errors::ParameterAlreadyExists
+        # Do nothing, it's cool...
+      end
+    end
+    def shutdown
+      VCR.use_cassette(__method__, :match_requests_on => [:method]) do
+        Aws::App::Settings::SystemsManagerStore.new.delete_setting(
+          name: @@tmp_setting_name
+        )
+      end
+    end
+    def suite
+        mysuite = super
+        def mysuite.run(*args)
+          Aws::App::SettingsTest.startup()
+          super
+          Aws::App::SettingsTest.shutdown()
+        end
+        mysuite
+    end
+  end
+
   private
 
   def without_expires_at(responses)
