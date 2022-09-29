@@ -1,10 +1,54 @@
 # aws-app-settings
 
-A Ruby gem for cloud applications to use for managing configuration settings and secrets with AWS Secrets Manager and AWS Systems Manager.
+A Ruby gem for cloud applications to use for managing configuration settings and secrets with AWS Systems Manager.
 
 This gem provides a caching mechanism with a configurable time-to-live, enabling you to rotate your application secrets or change your configuration settings without re-deploying your app.
 
 It will create and retrieve settings using a pattern that includes the application and environment names, for enabling the separation of environments.
+
+## Features
+
+### Caching
+
+The settings are cached in memory for 15 minutes, to reduce the number of AWS API calls.  The caching behavior is currently not configurable.
+
+TODO: Make the caching more configurable.
+
+### Environment variable overrides
+
+_coming soon_
+
+TODO: Each setting has a name, and if you set an environment variable with that name then it will override the setting from Systems Manager.
+
+### Load environment variables from `.env` files
+
+_coming soon_
+
+TODO: You can configure those enviornment variables in a `.env` file during development.
+
+### Separate setting names for separate environments
+
+_coming soon_
+
+TODO: You can interpolate the environment or application name into the setting name, so that you can provide a separate value for different environments.
+
+### Coalescing
+
+The AWS API calls are coalesced into one when possible, so that it will only require one API call to fetch all required settings.  Those values are also cached, farther reducing the number of API calls to AWS Systems Manager.
+
+### Support for AWS Amplify secrets
+
+AWS Amplify has a command-line mechanism for [configuring secrets](https://docs.amplify.aws/cli/function/secrets/#configuring-secret-values) for a Lambda function within an Amplify app.  You can use `amplify update function` to configure secrets.
+
+But you're responsible for writing the code to retrieve those secrets from the parameter store in AWS Systems Manager.
+
+Amplify doesn't offer any help with setting it up so that you only load those secrets during the initialization of your Lambda environment and not during each function invocation.
+
+Amplify also doesn't offer any help with setting it up to expire the cache and reload when necessary during function invocations.
+
+Amplify also doesn't offer any help with overriding the settings with environment variables or `.env` files during development and testing.
+
+This gem handles things like that.
 
 ## Installation
 
@@ -64,7 +108,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/aws-app-settings.
+Bug reports and pull requests are welcome on GitHub at https://github.com/VenueDriver/aws-app-settings.
 
 ## License
 
